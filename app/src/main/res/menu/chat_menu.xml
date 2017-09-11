@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/sound"
+        android:title="提示音"
+        android:checkable="true"/>
+    <item
+        android:id="@+id/shake"
+        android:title="震动"
+        android:checkable="true"/>
+    <item
+        android:id="@+id/auto_update"
+        android:title="自动更新"
+        android:checkable="true"/>
+    <item
+        android:id="@+id/logout"
+        android:title="注销登录"/>
+    <item
+        android:id="@+id/exit"
+        android:title="退出"/>
+</menu>

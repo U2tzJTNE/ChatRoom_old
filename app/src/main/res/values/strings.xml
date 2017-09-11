@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ChatRoom</string>
+
+    <string name="hint">Type emoji here</string>
+    <string name="i_love_emojicon">I \ue32d emojicon</string>
+    <string name="title_activity_test">TestActivity</string>
+</resources>

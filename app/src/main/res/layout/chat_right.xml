@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:emojicon="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:background="#00000000"
+    android:weightSum="1"
+    android:paddingTop="20dp">
+
+    <TextView
+        android:layout_weight="0.3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_weight="0.7"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:weightSum="1">
+
+        <me.himanshusoni.chatmessageview.ChatMessageView
+            android:layout_weight="0.95"
+            android:layout_marginTop="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:cmv_backgroundColor="@color/colorPrimary"
+            app:cmv_backgroundColorPressed="#FFBABABA"
+            app:cmv_cornerRadius="3dp"
+            app:cmv_arrowGravity="start"
+            app:cmv_arrowPosition="right">
+            <io.github.rockerhieu.emojicon.EmojiconTextView
+                android:id="@+id/chat_text_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                emojicon:emojiconSize="38sp"
+                android:textSize="16sp"
+                android:text="测试信息测试信息测试信息测试信息测试信息"
+                android:textColor="@color/white"/>
+        </me.himanshusoni.chatmessageview.ChatMessageView>
+
+        <LinearLayout
+            android:layout_weight="0.05"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/chat_icon_right"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/icon_4"/>
+            <TextView
+                android:id="@+id/chat_name_right"
+                android:gravity="center"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:text="我"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
