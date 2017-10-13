@@ -83,7 +83,9 @@ public class ChatActivity extends AppCompatActivity
     // 定义与服务器通信的子线程
     private ClientServerUtil clientThread;
 
-    private static String  DIV= "♥";
+    private static String DIV = "♥";
+
+    private boolean emojShow = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,14 +96,11 @@ public class ChatActivity extends AppCompatActivity
         initData();
 
 
-        handler = new Handler()
-        {
+        handler = new Handler() {
             @Override
-            public void handleMessage(Message msg)
-            {
+            public void handleMessage(Message msg) {
                 // 如果消息来自于子线程
-                if (msg.what == 0x123)
-                {
+                if (msg.what == 0x123) {
                     String packM = msg.obj.toString();
 
                     getData(packM);
@@ -110,27 +109,27 @@ public class ChatActivity extends AppCompatActivity
 
                     chatList.setAdapter(myAdapter);
 
-                    String MYname = (String) list.get(list.size()-1).get("name");
+                    String MYname = (String) list.get(list.size() - 1).get("name");
 
                     //震动
-                    if (SPUtil.getBoolean("shake",true) && !MYname.equals(name)){
+                    if (SPUtil.getBoolean("shake", true) && !MYname.equals(name)) {
 
-                        long [] pattern = {100,400,100,400};
-                        vibrator.vibrate(pattern,-1);
+                        long[] pattern = {100, 400, 100, 400};
+                        vibrator.vibrate(pattern, -1);
                     }
 
                     //提示音
-                    if (SPUtil.getBoolean("sound",true) && !MYname.equals(name)){
-                        if (flag){
+                    if (SPUtil.getBoolean("sound", true) && !MYname.equals(name)) {
+                        if (flag) {
                             //  播放声音池中的文件, 可以指定播放音量，优先级 声音播放的速率
                             soundPool.play(soundId, 1.0f, 0.5f, 1, 0, 1.0f);
-                        }else {
+                        } else {
                             Toast.makeText(ChatActivity.this, "提示音加载失败", Toast.LENGTH_SHORT).show();
                         }
                     }
 
 
-                    chatList.setSelection(myAdapter.getCount()-1);
+                    chatList.setSelection(myAdapter.getCount() - 1);
 
                 }
             }
@@ -139,17 +138,14 @@ public class ChatActivity extends AppCompatActivity
         clientThread = new ClientServerUtil(handler);
         // 客户端启动ClientThread线程创建网络连接、读取来自服务器的数据
         new Thread(clientThread).start();
-        btnSend.setOnClickListener(new View.OnClickListener()
-        {
+        btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
 
-                if(emojiEdit.getText().toString().equals("")){
+                if (emojiEdit.getText().toString().equals("")) {
                     Toast.makeText(ChatActivity.this, "消息不能为空", Toast.LENGTH_SHORT).show();
-                }else {
-                    try
-                    {
+                } else {
+                    try {
                         // 当用户按下发送按钮后，将用户输入的数据封装成Message
                         // 然后发送给子线程的Handler
                         Message msg = new Message();
@@ -159,16 +155,14 @@ public class ChatActivity extends AppCompatActivity
 
                         msg.what = 0x345;
 
-                        String packMsg = name+DIV+icon+DIV+emojiEdit.getText().toString()+DIV+date;
+                        String packMsg = name + DIV + icon + DIV + emojiEdit.getText().toString() + DIV + date;
 
                         msg.obj = packMsg;
 
                         clientThread.revHandler.sendMessage(msg);
                         // 清空input文本框
                         emojiEdit.setText("");
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -188,8 +182,7 @@ public class ChatActivity extends AppCompatActivity
         emojiEdit.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                emojiKeyboard.setVisibility(View.GONE);
-                emojiBox.setChecked(false);
+                showEmojiKeyboard(false);
                 return false;
             }
         });
@@ -201,10 +194,10 @@ public class ChatActivity extends AppCompatActivity
     /**
      * 初始化数据
      */
-    public void initData(){
-        name = SPUtil.getString("username","test");
-        System.out.println("------------------>登录界面：icon "+icon);
-        icon = SPUtil.getInt("icon",R.drawable.icon_1);
+    public void initData() {
+        name = SPUtil.getString("username", "test");
+        System.out.println("------------------>登录界面：icon " + icon);
+        icon = SPUtil.getInt("icon", R.drawable.icon_1);
         //震动
         vibrator = (Vibrator) ChatActivity.this.getSystemService(Service.VIBRATOR_SERVICE);
         //提示音
@@ -229,6 +222,8 @@ public class ChatActivity extends AppCompatActivity
         } else {
             emojiKeyboard.setVisibility(View.GONE);
         }
+        emojiBox.setChecked(isShow);
+        emojShow = isShow;
     }
 
     //设置Fragment
@@ -252,10 +247,10 @@ public class ChatActivity extends AppCompatActivity
     }
 
     /**
-     * @param mss  服务器发来的数据
+     * @param mss 服务器发来的数据
      * @return
      */
-    private List<Map<String, Object>> getData(String mss){
+    private List<Map<String, Object>> getData(String mss) {
         Map<String, Object> map = new HashMap<String, Object>();
 
         String[] arr = mss.split(DIV);
@@ -263,9 +258,9 @@ public class ChatActivity extends AppCompatActivity
         String name = arr[0];
         int icon = Integer.parseInt(arr[1]);
         String text = arr[2];
-        map.put("icon",icon);
-        map.put("name",name);
-        map.put("text",text);
+        map.put("icon", icon);
+        map.put("name", name);
+        map.put("text", text);
         list.add(map);
 
         return list;
@@ -274,8 +269,8 @@ public class ChatActivity extends AppCompatActivity
 
     private class MyAdapter extends BaseAdapter {
 
-        private int Type_1=0;//注意这个不同布局的类型起始值必须从0开始
-        private int Type_2=1;
+        private int Type_1 = 0;//注意这个不同布局的类型起始值必须从0开始
+        private int Type_2 = 1;
 
         @Override
         public int getCount() {
@@ -296,9 +291,9 @@ public class ChatActivity extends AppCompatActivity
         public int getItemViewType(int position) {
 
             String name_1 = (String) list.get(position).get("name");
-            if (name_1.equals(name)){
+            if (name_1.equals(name)) {
                 return Type_2;
-            }else{
+            } else {
                 return Type_1;
             }
 
@@ -314,11 +309,11 @@ public class ChatActivity extends AppCompatActivity
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder_left viewHolder_1 = null;
             ViewHolder_right viewHolder_2 = null;
-            int Type=getItemViewType(position);
-            if(convertView==null){
+            int Type = getItemViewType(position);
+            if (convertView == null) {
                 //左边显示
-                if(Type==Type_1){
-                    convertView=getLayoutInflater().inflate(R.layout.chat_left,parent,false);
+                if (Type == Type_1) {
+                    convertView = getLayoutInflater().inflate(R.layout.chat_left, parent, false);
                     viewHolder_1 = new ViewHolder_left();
 
                     viewHolder_1.icon_left = (ImageView) convertView.findViewById(R.id.chat_icon_left);
@@ -327,8 +322,8 @@ public class ChatActivity extends AppCompatActivity
 
                     convertView.setTag(viewHolder_1);
                     //右边显示
-                }else if(Type==Type_2){
-                    convertView=getLayoutInflater().inflate(R.layout.chat_right,parent,false);
+                } else if (Type == Type_2) {
+                    convertView = getLayoutInflater().inflate(R.layout.chat_right, parent, false);
                     viewHolder_2 = new ViewHolder_right();
 
                     viewHolder_2.icon_right = (ImageView) convertView.findViewById(R.id.chat_icon_right);
@@ -338,21 +333,21 @@ public class ChatActivity extends AppCompatActivity
                     convertView.setTag(viewHolder_2);
                 }
 
-            }else {
+            } else {
 
-                if(Type==Type_1){
+                if (Type == Type_1) {
                     viewHolder_1 = (ViewHolder_left) convertView.getTag();
-                }else if(Type==Type_2){
+                } else if (Type == Type_2) {
                     viewHolder_2 = (ViewHolder_right) convertView.getTag();
                 }
 
             }
             //设置数据
-            if(Type==Type_1){
+            if (Type == Type_1) {
                 viewHolder_1.name_left.setText((String) list.get(position).get("name"));
                 viewHolder_1.text_left.setText((String) list.get(position).get("text"));
                 viewHolder_1.icon_left.setImageResource((Integer) list.get(position).get("icon"));
-            }else if(Type==Type_2){
+            } else if (Type == Type_2) {
 
                 viewHolder_2.text_right.setText((String) list.get(position).get("text"));
                 viewHolder_2.icon_right.setImageResource((Integer) list.get(position).get("icon"));
@@ -361,14 +356,14 @@ public class ChatActivity extends AppCompatActivity
             return convertView;
         }
 
-        private class ViewHolder_left{
+        private class ViewHolder_left {
             private EmojiconTextView text_left;
             private ImageView icon_left;
             private TextView name_left;
 
         }
 
-        private class ViewHolder_right{
+        private class ViewHolder_right {
             private EmojiconTextView text_right;
             private ImageView icon_right;
             private TextView name_right;
@@ -376,12 +371,17 @@ public class ChatActivity extends AppCompatActivity
     }
 
     /**
-     * 再按一次退出程序
+     * 返回键
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN){
-            if((System.currentTimeMillis()-exitTime) > 2000){
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+            //隐藏emoj键盘
+            if (emojShow) {
+                showEmojiKeyboard(false);
+                return true;
+            }
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
                 Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
                 exitTime = System.currentTimeMillis();
             } else {
@@ -396,43 +396,43 @@ public class ChatActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = new MenuInflater(this);
-        inflater.inflate(R.menu.chat_menu,menu);
+        inflater.inflate(R.menu.chat_menu, menu);
 
-        menu.findItem(R.id.sound).setChecked(SPUtil.getBoolean("sound",true));
-        menu.findItem(R.id.shake).setChecked(SPUtil.getBoolean("shake",true));
-        menu.findItem(R.id.auto_update).setChecked(SPUtil.getBoolean("update",true));
+        menu.findItem(R.id.sound).setChecked(SPUtil.getBoolean("sound", true));
+        menu.findItem(R.id.shake).setChecked(SPUtil.getBoolean("shake", true));
+        menu.findItem(R.id.auto_update).setChecked(SPUtil.getBoolean("update", true));
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if (item.isCheckable()){
-            if (item.isChecked()){
+        if (item.isCheckable()) {
+            if (item.isChecked()) {
                 item.setChecked(false);
-            }else {
+            } else {
                 item.setChecked(true);
             }
         }
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.sound://声音
-                SPUtil.putBoolean("sound",item.isChecked());
-                Toast.makeText(ChatActivity.this,item.isChecked()?"提示音已开启":"提示音已关闭", Toast.LENGTH_SHORT).show();
+                SPUtil.putBoolean("sound", item.isChecked());
+                Toast.makeText(ChatActivity.this, item.isChecked() ? "提示音已开启" : "提示音已关闭", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.shake://震动
-                SPUtil.putBoolean("shake",item.isChecked());
-                Toast.makeText(ChatActivity.this,item.isChecked()?"震动已开启":"震动已关闭", Toast.LENGTH_SHORT).show();
+                SPUtil.putBoolean("shake", item.isChecked());
+                Toast.makeText(ChatActivity.this, item.isChecked() ? "震动已开启" : "震动已关闭", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.auto_update://自动更新
-                SPUtil.putBoolean("update",item.isChecked());
-                Toast.makeText(ChatActivity.this, item.isChecked()?"自动更新已开启":"自动更新已关闭", Toast.LENGTH_SHORT).show();
+                SPUtil.putBoolean("update", item.isChecked());
+                Toast.makeText(ChatActivity.this, item.isChecked() ? "自动更新已开启" : "自动更新已关闭", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.logout://注销
-                SPUtil.putString("username","");
-                SPUtil.putString("password","");
-                SPUtil.putInt("icon",R.drawable.icon_1);
-                startActivity(new Intent(ChatActivity.this,LoginActivity.class));
+                SPUtil.putString("username", "");
+                SPUtil.putString("password", "");
+                SPUtil.putInt("icon", R.drawable.icon_1);
+                startActivity(new Intent(ChatActivity.this, LoginActivity.class));
                 break;
             case R.id.exit: //退出
                 finish();

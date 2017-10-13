@@ -264,9 +264,9 @@ public class SignupActivity extends AppCompatActivity {
     public class MyThread implements Runnable {
         @Override
         public void run() {
-            System.out.println("-------------->开始执行");
+            //System.out.println("-------------->开始执行");
             info = QueryUserUtil.executeHttpGet(username);
-            System.out.println("-------------->执行结束，服务器返回的数据为：  "+info);
+            //System.out.println("-------------->执行结束，服务器返回的数据为：  "+info);
             if (info != null){
                 if (info.equals(username)){
                     info = RegisterUtil.executeHttpGet(username,password,icon);

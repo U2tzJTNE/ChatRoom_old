@@ -68,7 +68,6 @@ public class LoginActivity extends AppCompatActivity {
                 // 跳转到注册界面
                 Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
                 startActivity(intent);
-                finish();
                 //切换动画
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }

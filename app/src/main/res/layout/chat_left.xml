@@ -2,65 +2,69 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:emojicon="http://schemas.android.com/tools"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#00000000"
     android:gravity="center"
+    android:orientation="horizontal"
     android:paddingTop="20dp">
 
     <LinearLayout
-        android:layout_weight="0.7"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="0.7"
         android:weightSum="1">
 
         <LinearLayout
-            android:layout_weight="0.05"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="0.05"
             android:gravity="center"
             android:orientation="vertical">
+
             <ImageView
                 android:id="@+id/chat_icon_left"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/icon_4"/>
+                android:src="@drawable/icon_4" />
+
             <TextView
                 android:id="@+id/chat_name_left"
-                android:gravity="center"
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="zhang"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <me.himanshusoni.chatmessageview.ChatMessageView
-            android:layout_weight="0.95"
-            android:layout_marginTop="10dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.95"
+            app:cmv_arrowGravity="start"
+            app:cmv_arrowPosition="left"
             app:cmv_backgroundColor="@color/primary"
             app:cmv_backgroundColorPressed="#FFBABABA"
-            app:cmv_cornerRadius="3dp"
-            app:cmv_arrowGravity="start"
-            app:cmv_arrowPosition="left">
+            app:cmv_cornerRadius="3dp">
+
             <io.github.rockerhieu.emojicon.EmojiconTextView
                 android:id="@+id/chat_text_left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                emojicon:emojiconSize="38sp"
                 android:text="测试信息测试信息测试信息测试信息测试信息"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                emojicon:emojiconAlignment="baseline"
+                emojicon:emojiconSize="28sp" />
         </me.himanshusoni.chatmessageview.ChatMessageView>
 
 
     </LinearLayout>
 
     <TextView
-        android:layout_weight="0.3"
         android:layout_width="0dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_weight="0.3" />
 
 </LinearLayout>

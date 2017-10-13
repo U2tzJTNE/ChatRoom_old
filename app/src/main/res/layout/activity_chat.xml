@@ -1,62 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="cn.an0nymous.chatroom.Activity.ChatActivity">
+
     <ListView
         android:id="@+id/chat_list"
-        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="1"
         android:divider="@null"
-        android:transcriptMode="normal"
-        android:listSelector="#00000000"/>
+        android:listSelector="#00000000"
+        android:transcriptMode="normal" />
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:background="@color/white"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:weightSum="1"
-            android:gravity="center_vertical">
+            android:weightSum="1">
 
             <CheckBox
                 android:id="@+id/emoji_box"
-                android:layout_weight="0.1"
                 android:layout_width="0dp"
-                android:background="@drawable/selector_chat_face"
                 android:layout_height="35dp"
-                android:button="@null"/>
+                android:layout_weight="0.1"
+                android:background="@drawable/selector_chat_face"
+                android:button="@null" />
 
             <io.github.rockerhieu.emojicon.EmojiconEditText
                 android:id="@+id/emoji_edit"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
                 android:layout_weight="0.73"
-                android:layout_width="0dp"
                 android:hint="输入消息"
-                android:textSize="16sp"
+                emojicon:emojiconSize="28sp"
                 android:textColor="@color/black"
-                android:layout_height="match_parent" />
+                android:textSize="16sp" />
+
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_send"
-                android:layout_weight="0.17"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="发送"/>
+                android:layout_weight="0.17"
+                android:text="发送" />
         </LinearLayout>
+
         <FrameLayout
             android:id="@+id/emoji_keyboard"
-            android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="230dp">
-        </FrameLayout>
+            android:layout_height="230dp"
+            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>
