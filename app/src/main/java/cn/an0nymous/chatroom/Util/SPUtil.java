@@ -16,15 +16,15 @@ public class SPUtil {
 
     public static void putString(String key,String value){
         editor.putString(key,value);
-        editor.commit();
+        editor.apply();
     }
     public static void putInt(String key,int value){
         editor.putInt(key, value);
-        editor.commit();
+        editor.apply();
     }
     public static void putBoolean(String key,boolean value){
         editor.putBoolean(key,value);
-        editor.commit();
+        editor.apply();
     }
     public static String getString(String key,String defValue){
         return sp.getString(key, defValue);

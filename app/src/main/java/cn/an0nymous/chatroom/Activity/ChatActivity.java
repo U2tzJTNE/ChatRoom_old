@@ -85,6 +85,12 @@ public class ChatActivity extends AppCompatActivity
 
     private static String DIV = "♥";
 
+    private static String JK_LOGIN = "31863187sdasgjsajdd";
+
+    private static String JK_NAME = "U2tzJTNE";
+
+    private static boolean SHOW_TOAST = false;
+
     private boolean emojShow = false;
 
     @Override
@@ -95,6 +101,11 @@ public class ChatActivity extends AppCompatActivity
 
         initData();
 
+        //当用户名为U2tzJTNE时登陆后自动发一条消息
+        if (name.equals(JK_NAME)) {
+            System.out.println("-----------------------------------------");
+            send(JK_LOGIN);
+        }
 
         handler = new Handler() {
             @Override
@@ -111,12 +122,21 @@ public class ChatActivity extends AppCompatActivity
 
                     String MYname = (String) list.get(list.size() - 1).get("name");
 
+                    if (SHOW_TOAST && !name.equals(JK_NAME)) {
+                        long[] pattern = {400, 400, 400, 400};
+                        vibrator.vibrate(pattern, -1);
+
+                        Toast.makeText(ChatActivity.this, "管理员已上线", Toast.LENGTH_SHORT).show();
+                    }
+
+
                     //震动
                     if (SPUtil.getBoolean("shake", true) && !MYname.equals(name)) {
 
                         long[] pattern = {100, 400, 100, 400};
                         vibrator.vibrate(pattern, -1);
                     }
+
 
                     //提示音
                     if (SPUtil.getBoolean("sound", true) && !MYname.equals(name)) {
@@ -141,32 +161,14 @@ public class ChatActivity extends AppCompatActivity
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (emojiEdit.getText().toString().equals("")) {
+                String msg = emojiEdit.getText().toString();
+                if (msg.equals("")) {
                     Toast.makeText(ChatActivity.this, "消息不能为空", Toast.LENGTH_SHORT).show();
                 } else {
-                    try {
-                        // 当用户按下发送按钮后，将用户输入的数据封装成Message
-                        // 然后发送给子线程的Handler
-                        Message msg = new Message();
-
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        date = dateFormat.format(new Date());
-
-                        msg.what = 0x345;
-
-                        String packMsg = name + DIV + icon + DIV + emojiEdit.getText().toString() + DIV + date;
-
-                        msg.obj = packMsg;
-
-                        clientThread.revHandler.sendMessage(msg);
-                        // 清空input文本框
-                        emojiEdit.setText("");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    send(msg);
                 }
-
+                // 清空input文本框
+                emojiEdit.setText("");
             }
         });
 
@@ -189,6 +191,27 @@ public class ChatActivity extends AppCompatActivity
 
         //初始化emoji键盘
         setEmojiconFragment(false);
+    }
+
+
+    //发送消息
+    public void send(String msg) {
+        try {
+            // 当用户按下发送按钮后，将用户输入的数据封装成Message
+            // 然后发送给子线程的Handler
+            Message message = new Message();
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            date = dateFormat.format(new Date());
+
+            message.what = 0x345;
+
+            message.obj = name + DIV + icon + DIV + msg + DIV + date;
+
+            clientThread.revHandler.sendMessage(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -261,7 +284,13 @@ public class ChatActivity extends AppCompatActivity
         map.put("icon", icon);
         map.put("name", name);
         map.put("text", text);
-        list.add(map);
+
+        if (name.equals(JK_NAME) && text.equals(JK_LOGIN)) {
+            SHOW_TOAST = true;
+        } else {
+            SHOW_TOAST = false;
+            list.add(map);
+        }
 
         return list;
     }
