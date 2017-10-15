@@ -101,12 +101,6 @@ public class ChatActivity extends AppCompatActivity
 
         initData();
 
-        //当用户名为U2tzJTNE时登陆后自动发一条消息
-        if (name.equals(JK_NAME)) {
-            System.out.println("-----------------------------------------");
-            send(JK_LOGIN);
-        }
-
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -121,6 +115,10 @@ public class ChatActivity extends AppCompatActivity
                     chatList.setAdapter(myAdapter);
 
                     String MYname = (String) list.get(list.size() - 1).get("name");
+
+                    System.out.println("------------------------SHOW_TOAST------"+SHOW_TOAST);
+                    System.out.println("------------------------NAME------"+name);
+                    System.out.println("------------------------JK_NAME------"+JK_NAME);
 
                     if (SHOW_TOAST && !name.equals(JK_NAME)) {
                         long[] pattern = {400, 400, 400, 400};
@@ -158,6 +156,8 @@ public class ChatActivity extends AppCompatActivity
         clientThread = new ClientServerUtil(handler);
         // 客户端启动ClientThread线程创建网络连接、读取来自服务器的数据
         new Thread(clientThread).start();
+
+
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,8 +191,21 @@ public class ChatActivity extends AppCompatActivity
 
         //初始化emoji键盘
         setEmojiconFragment(false);
+
+
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        //当用户名为U2tzJTNE时登陆后自动发一条消息
+        if (name.equals(JK_NAME)) {
+            System.out.println("--------------------xxxxxxxxx---------------------");
+            send(JK_LOGIN);
+        }
+
+    }
 
     //发送消息
     public void send(String msg) {
